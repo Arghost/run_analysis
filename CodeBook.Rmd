@@ -1,0 +1,100 @@
+---
+title: "CodeBook"
+author: "R. Torres"
+date: "7/31/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Getting and Cleaning Data Course Project
+
+This documents presents the information related to the run_analysis program to collect, transform and generate data. The following steps describe the code sequence and outputs.
+
+  **a. Load all data into tables**
+  
+Dataset downloaded from [link](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip) and stored locally in a defined path.
+Setwd must be used to direct R to the designated location
+  
+##### Data Frames:
+```{r, chunk-code, include=FALSE}
+library(dplyr)
+features <- read.table("features.txt", col.names = c("n","feature"))
+train_x <- read.table("train/X_train.txt", col.names = features$feature)
+train_y <- read.table("train/y_train.txt", col.names = "code")
+test_x <- read.table("test/X_test.txt", col.names = features$feature)
+test_y <- read.table("test/y_test.txt", col.names = "code")
+train_subject <- read.table("train/subject_train.txt", col.names = "subject")
+test_subject <- read.table("test/subject_test.txt", col.names = "subject")
+act_lbls <- read.table("activity_labels.txt", col.names = c("code", "activity"))
+
+#Data frame to use as merged
+merged <- tibble()
+#join test and train data for x and y
+x_data <- rbind(train_x, test_x)
+y_data <- rbind(train_y, test_y)
+
+sbj <- rbind(train_subject, test_subject)
+
+#Merge all info together
+merged <- cbind(sbj, x_data, y_data)
+
+```
+`Features`, total rows: **`r nrow(features)`** . Contains accelerometer and gyroscope data\
+`train_x`, total rows: **`r nrow(train_x)`**. Training data\
+`train_y`, total rows: **`r nrow(train_y)`**. Training activity labels\
+`test_x`, total rows: **`r nrow(test_x)`**. Test data\
+`test_y`, total rows: **`r nrow(test_y)`**. Test activity labels\
+`train_subject`, total rows: **`r nrow(train_subject)`**. Contains the data of training volunteers\
+`test_subject`, total rows: **`r nrow(test_subject)`**. Contains the data of test volunteers\
+`act_lbls`, total rows: **`r nrow(act_lbls)`**. List of activities performed by subjects and the codes associated to them.
+\
+
+**b. Merges the training and the test sets to create one data set.**
+
+- `x_data` <- Generated after merging train_x and test_x using **rbind()**
+- `y_data` <- Generated after merging train_y and test_y using **rbind()**
+- `sbj` <- Generated after merging train_subj and test_subj using **rbind()**
+- `merged` <- Data frame containing training, test and subject data together using **cbind()**
+
+Total rows and column after merging all data: **`r nrow(merged)`** rows and **`r ncol(merged)`** columns
+
+**c. Extracts only the measurements on the mean and standard deviation for each measurement.**
+
+
+`TidyData`: Generated filtering mergedData using mutate function `%>%`. Only measurements containing `mean` or `standard deviation` are used. Columns `Code` and `Subject` are selected
+
+**d. Uses descriptive activity names to name the activities in the data set**
+
+Using the numbers of `code`, the names of the activities are taken from `act_lbls` as follows:
+
+- `Code` 1: `WALKING`
+- `Code` 2: `WALKING_UPSTAIRS`
+- `Code` 3: `WALKING_DOWNSTAIRS`
+- `Code` 4: `SITTING`
+- `Code` 5: `STANDING`
+- `Code` 6: `LAYING`
+  
+**e. Appropriately labels the data set with descriptive variable names.**
+
+With instruction `gsub`, unclear names are changed for more descriptive variables:
+
+`Acc`, Replaced by Accelerometer\
+`Gyro`, Replaced by Gyroscope\
+`angle`, Replaced by Angle\
+`gravity`, Replaced by Gravity\
+`tBody`, Replaced by TimeBody\
+`mean`, Replaced by Mean\
+`std`, Replaced by STD\
+`^t`, Replaced by Time\
+`^f`, Replaced by Frecuency\
+
+**f. Create a data set with the average of each variable for each activity and each subject**
+
+- Using `mutate, group_by and summarise_all` functions, each variable is combined and the average is calculated using `mean`.
+- Data is exported to file `TidyDataOutput.csv` for easy reading and understanding.
+
+
+

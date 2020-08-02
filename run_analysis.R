@@ -59,6 +59,7 @@ process_data <- function(merged_data){
   TidyData <- merged_data %>% 
             select(subject, code, contains("mean"), contains("std"))%>%
             rename(activity = code)
+  
   #Uses descriptive activity names to name the activities in the data set
   TidyData$activity <- act_lbls[TidyData$activity, 2]
   
@@ -80,6 +81,9 @@ process_data <- function(merged_data){
     group_by(subject, activity) %>%
     summarise_all(list(mean = mean))
   
+  #Export data
+  write.csv(OutPut, "TidyDataOutput.csv", row.name=TRUE)
+
   #Final print with results
-  print(OutPut)
+  print(head(OutPut, 100))
 }
