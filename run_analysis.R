@@ -32,7 +32,7 @@ load_TrainAndTest_data <- function(){
   merged_data <- merge_data_sets(test_x, test_y, train_y, train_x, train_subject, test_subject)
   
   #Function to process the data and show results
-  process_data(merged_data)
+  process_data(merged_data, act_lbls)
 }
  
 #Merges the training and the test sets to create one data set.
@@ -53,7 +53,7 @@ merge_data_sets <- function(test_x, test_y, train_y, train_x, train_subj, test_s
 }
 
 # Process data as defined in the assignment
-process_data <- function(merged_data){
+process_data <- function(merged_data, act_lbls){
 
   #Extracts only the measurements on the mean and standard deviation for each measurement.
   TidyData <- merged_data %>% 
@@ -82,7 +82,7 @@ process_data <- function(merged_data){
     summarise_all(list(mean = mean))
   
   #Export data
-  write.csv(OutPut, "TidyDataOutput.csv", row.name=TRUE)
+  write.csv(OutPut, "TidyDataOutput.txt", row.names=FALSE)
 
   #Final print with results
   print(head(OutPut, 100))

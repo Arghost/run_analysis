@@ -94,7 +94,7 @@ With instruction `gsub`, unclear names are changed for more descriptive variable
 **f. Create a data set with the average of each variable for each activity and each subject**
 
 - Using `mutate, group_by and summarise_all` functions, each variable is combined and the average is calculated using `mean`.
-- Data is exported to file `TidyDataOutput.csv` for easy reading and understanding.
+- Data is exported to file `TidyDataOutput.txt` for easy reading and understanding.
 
 
 

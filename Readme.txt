@@ -15,5 +15,5 @@ Files in this repository:
   f. Create an independent tidy data set with the average of each variable for each activity and each subject.
   g. Exports the data to a csv file for easy reading and following.
 
-3. TidyDataOutput.csv: CSV file that contains the mean of each variable for each individual (30 total) used for the test.
+3. TidyDataOutput.txt: CSV file that contains the mean of each variable for each individual (30 total) used for the test.
    File is composed of the dataset generated un the run_analysis code
